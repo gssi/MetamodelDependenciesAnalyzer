@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ASCII"?>
+<graph:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:graph="http://cs.gssi.it/graph" xsi:schemaLocation="http://cs.gssi.it/graph file:///Users/administrator/eclipse/sirius/obeo-ws/graphModeling/bin/graphModeling/analysis/aux/GraphMM.ecore">
+  <nodes xsi:type="graph:Metamodel" path="///Users/administrator/eclipse/sirius/obeo-ws/graphModeling/bin/graphModeling/analysis/repository/PersonsMM.ecore" name="Persons" highlighted="true" nsURI="http://cs.gssi.it/persons"/>
+  <nodes xsi:type="graph:Metamodel" path="///Users/administrator/eclipse/sirius/obeo-ws/graphModeling/bin/graphModeling/analysis/repository/WebApp.ecore" name="WebApp" nsURI="http://cs.gssi.it/webApp"/>
+  <edges xsi:type="graph:Dependency" src="//@nodes.1" trg="//@nodes.0"/>
+</graph:Repository>

@@ -1,0 +1,19 @@
+var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+
+graphmodel.println();
+
+var mygraph = graphmodel!Graph.all.first;
+mygraph.mergeDependencies().println();
+
+operation graphmodel!Graph mergeDependencies(){
+	var edges=new Set();
+	edges=graphmodel!Edge.all;
+	var bidir = 	edges.select(e|e.select(ed|edges.src.includes(ed.trg) and emfTool.EcoreUtil.equals(ed.src,e.src)).size()>0);
+	if(bidir.size>1){
+	for (rel in bidir) { 
+		rel.bidirectional=true;
+	}
+	self.edges.remove(bidir.first).println();
+	}
+}
+

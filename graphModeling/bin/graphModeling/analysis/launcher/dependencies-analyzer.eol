@@ -1,0 +1,97 @@
+var emfTool = new Native("org.eclipse.epsilon.emc.emf.tools.EmfTool");
+("Initializing EMF Tools:").println();
+emfTool.println();
+
+var repository = System.context.modelRepository.models.excluding(graphmodel);
+
+var subjectmm = System.context.modelRepository.models.select(mod|mod=subject).first;
+var graphmodel : new graphmodel!Repository();
+("==================================================").println();
+("Subject: "+subjectmm.getAllOfType("EPackage").first.name+" ("+subjectmm.getAllOfType("EPackage").first.nsURI+")").println();
+("==================================================").println();
+if(repository.size()>1){
+("Nr. of models in repository: "+(repository.size-1)).println();
+
+for (m in repository) {
+	
+  	var repomm : new graphmodel!Metamodel();
+	repomm.name = m.getAllOfType("EPackage").first.name;
+	repomm.nsURI = m.getAllOfType("EPackage").first.nsUri;
+	
+	repomm.path  = m.modelFile;
+	if(m.getAllOfType("EPackage").first.nsUri==subjectmm.getAllOfType("EPackage").first.nsUri) repomm.highlighted=true;
+	graphmodel.nodes.add(repomm);
+
+}
+
+for (m in repository){
+
+
+	if(m.checkDependencies().size>0){
+
+	var repomm = graphmodel!Metamodel.all.select(metam|metam.nsURI==m.getAllOfType("EPackage").first.nsURI).first;
+	
+	for (dep in m.checkDependencies().asSet()) { 
+	
+	var srcmm= repomm;
+	//graphmodel!Metamodel.all.println();
+	var trgmm=graphmodel!Metamodel.all.select(uri|uri.nsURI.isSubstringOf(dep.nsURI)).first;	
+		
+		if(graphmodel!Dependency.all.select(d|d.src==srcmm and d.trg==trgmm).isEmpty()){
+			var dependency = new graphmodel!Dependency;
+			dependency.src = srcmm;
+			dependency.trg = trgmm;
+			("Dependency found between: "+srcmm.name+ " --> "+trgmm.name).println();
+			graphmodel.edges.add(dependency);
+			}
+		}
+	}
+}
+
+graphmodel.mergeDependencies();
+("==================================================").println();
+}else{
+	"Repository is empty!".println();
+}
+"Repository model saved".println();
+return true;
+
+operation Any checkDependencies(): List{
+	var connections :List ;
+	
+	for (c in self.getAllOfType("EClass") ){ 
+	
+	for (r in c.eAllReferences) { 
+	
+		if(not self!EPackage.all.includes(r.eType.eContainer) and not r.eType.eProxyURI.isDefined()){
+		
+		 	connections.add(r.eType.eContainer);
+		 }
+		  if(r.eType.eProxyURI.isDefined()){
+		 	connections.add(r.eType.eProxyURI.toString());
+		 }
+		}
+		for (st in c.eSupertypes) { 
+		
+			if(not self!EPackage.all.includes(st.eContainer)){
+			connections.add(st.eContainer.nsURI);
+			}
+		}	
+	}
+	return connections;
+}
+
+operation graphmodel!Graph mergeDependencies(){
+	var edges=new Set();
+	edges=graphmodel!Edge.all;
+	var bidir = 	edges.select(e|e.select(ed|edges.src.includes(ed.trg) and emfTool.EcoreUtil.equals(ed.src,e.src)).size()>0);
+	if(bidir.size>1){
+	for (rel in bidir) { 
+		rel.bidirectional=true;
+	}
+	self.edges.remove(bidir.first).println();
+	}
+}
+
+
+

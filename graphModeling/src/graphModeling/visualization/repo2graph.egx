@@ -1,0 +1,44 @@
+rule Repo2Graphviz
+    transform g : GraphMM::Repository {
+
+    template : "repo2graph.egl"
+    
+
+    parameters : Map{
+        "path" = Sequence{"Repository"},
+        "icon" = "diagram-ffffff",
+        "format" = "graphviz-circo",
+        "layers" = Sequence {
+            Map {"id"="dependency", "title"="relations", "active"=true}
+           
+        },
+        "nodes" = g.nodes,
+        "edges" =g.edges
+    }
+}
+
+rule NodeSelection
+ 
+	transform n : GraphMM::Metamodel {
+
+	template : "repo2graph.egl"
+
+	parameters : Map{
+		"path" = Sequence{"Repository", n.name},
+		"icon" = "diagram-c0c0c0",
+		"format" = "graphviz-dot",
+		"layers" = Sequence {
+			
+			
+		},
+		"nodes" = n.isConnected(),
+		"edges" = GraphMM::Edge.all.select(e|e.src==n or e.trg==n)
+	}
+	
+}
+
+operation GraphMM::Metamodel isConnected(){
+var seq=self.asSequence();
+return seq.includingAll(GraphMM::Metamodel.all.select(m| GraphMM::Dependency.all.forAll(e|(e.src==m or e.trg==m) or (e.src==self) )));
+}
+

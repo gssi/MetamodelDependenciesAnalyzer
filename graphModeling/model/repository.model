@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ASCII"?>
+<graph:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:graph="http://cs.gssi.it/graph">
+  <nodes xsi:type="graph:Metamodel" path="platform:/resource/crossreferenceMMs/model/example2/PersonsMM.ecore" name="Persons" highlighted="true" nsURI="http://cs.gssi.it/persons"/>
+  <nodes xsi:type="graph:Metamodel" path="platform:/resource/graphModeling/src/graphModeling/analysis/repository/Subscriptions.ecore" name="Subscription" nsURI="http://cs.gssi.it/subscriptions"/>
+  <nodes xsi:type="graph:Metamodel" path="platform:/resource/graphModeling/src/graphModeling/analysis/repository/WebApp.ecore" name="WebApp" nsURI="http://cs.gssi.it/webApp"/>
+  <edges xsi:type="graph:Dependency" src="//@nodes.1" trg="//@nodes.0"/>
+  <edges xsi:type="graph:Dependency" src="//@nodes.1" trg="//@nodes.2"/>
+</graph:Repository>

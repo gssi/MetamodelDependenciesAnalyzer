@@ -1,0 +1,49 @@
+digraph G {
+
+    node[shape=circle, fontname=Tahoma, fontsize=10, style="rounded",
+        gradientangle="270", fillcolor="#91b5c9"]
+
+    edge[penwidth=3, style=tapered, arrowhead=none]
+
+[%for (n in nodes){%]
+
+[%if(n.highlighted){%]
+node[shape=circle, style="filled", fillcolor="red:white",  margin=0, label=<<table cellspacing='1' cellborder='0' border="0" cellpadding="0"><tr><td align="right"><img src="[%=getIcon('modelicon')%]"/></td></tr><tr><td align="middle" valign="middle">[%=n.name%]</td></tr></table>>][%}else{%]
+node[shape=none, margin=0,style="filled", fillcolor="none", label=<<table cellspacing='1' cellborder='0' border="0" cellpadding="0"><tr><td align="right"><img src="[%=getIcon('modelicon')%]"/></td></tr><tr><td align="middle" valign="middle">[%=n.name%]</td></tr></table>>]
+[%}%]
+    "[%=n.name%]" [%if (nodes.size()==1){%][fillcolor="yellow:ghostwhite" label="[%=n.name%]"][%}%]
+
+[%}%]
+
+ 
+
+[%for (e in edges){%]
+
+     edge[penwidth=1, style=dashed, arrowhead="normal" dir="[%=(e.bidirectional)?'both':'forward'%]"]
+        
+            "[%=e.src.name%]" -> "[%=e.trg.name%]" [color="black"]
+
+
+[%}%]
+
+}
+
+[%
+
+
+
+operation isLayerActive(id : String) {
+    var layer = layers.selectOne(l|l.id = id);
+    if (layer.isDefined()) {
+        return layer.active;
+    }
+    else {
+        return true;
+    }
+}
+
+operation getIcon(icon : String) {
+	return getImage("icons/" + icon + ".png");
+}
+
+%]
