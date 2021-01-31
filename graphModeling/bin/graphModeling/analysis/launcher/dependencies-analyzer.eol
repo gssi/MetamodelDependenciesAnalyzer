@@ -35,7 +35,7 @@ for (m in repository){
 	
 	var srcmm= repomm;
 	//graphmodel!Metamodel.all.println();
-	var trgmm=graphmodel!Metamodel.all.select(uri|uri.nsURI.isSubstringOf(dep.nsURI)).first;	
+	var trgmm=graphmodel!Metamodel.all.select(uri|uri.nsURI.isSubstringOf(dep)).first;	
 		
 		if(graphmodel!Dependency.all.select(d|d.src==srcmm and d.trg==trgmm).isEmpty()){
 			var dependency = new graphmodel!Dependency;
@@ -65,15 +65,17 @@ operation Any checkDependencies(): List{
 	
 		if(not self!EPackage.all.includes(r.eType.eContainer) and not r.eType.eProxyURI.isDefined()){
 		
-		 	connections.add(r.eType.eContainer);
+		 	connections.add(r.eType.eContainer.nsURI);
 		 }
-		  if(r.eType.eProxyURI.isDefined()){
+		 if(r.eType.eProxyURI.isDefined()){
 		 	connections.add(r.eType.eProxyURI.toString());
 		 }
 		}
 		for (st in c.eSupertypes) { 
 		
-			if(not self!EPackage.all.includes(st.eContainer)){
+			if(not self!EPackage.all.includes(st.eContainer) ){
+			
+			
 			connections.add(st.eContainer.nsURI);
 			}
 		}	
