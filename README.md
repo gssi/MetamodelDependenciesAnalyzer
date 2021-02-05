@@ -8,4 +8,4 @@ This tool has been used in Edelta to support the parallel evolution of metamodel
 
 [1] Barriga, Angela, et al. "An extensible tool-chain for analyzing datasets of metamodels." Proceedings of the 23rd ACM/IEEE International Conference on Model Driven Engineering Languages and Systems: Companion Proceedings. 2020.
 
-<img width="100%" src=""/>
+<img width="100%" src="generatedGraph.png"/>
